@@ -17,12 +17,14 @@ var funcmap = map[string]interface{}{
 	"lower": strings.ToLower,
 }
 
+// Render copies the file tree from "from" to "to" while running text/template against any ".tmpl" files found (removing the .tmpl extension afterward)
 func Render(from string, to string, data interface{}) error {
 	fromFS := afero.NewBasePathFs(afero.NewOsFs(), from)
 	toFS := afero.NewBasePathFs(afero.NewOsFs(), to)
 	return RenderFS(fromFS, toFS, data)
 }
 
+// RenderFS is the same as Render but takes afero.Fs for from/to instead of filesystem paths
 func RenderFS(from afero.Fs, to afero.Fs, data interface{}) error {
 	err := afero.Walk(from, "", func(fullname string, info os.FileInfo, err error) error {
 		if err != nil {
